@@ -1,0 +1,4 @@
+#!/bin/sh
+
+# Remote paste to a tmux session over ssh from local clipboard
+nc localhost 2225
