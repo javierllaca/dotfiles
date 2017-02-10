@@ -1,0 +1,9 @@
+#!/bin/sh
+
+# Handy command-line csv file visualizer
+
+if [ $# -eq 1 ]; then
+    column -s, -t < $1 | less -#2 -N -S
+else
+    echo Usage: csv '<file_path>'
+fi

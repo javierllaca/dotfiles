@@ -1,0 +1,4 @@
+#!/bin/sh
+
+# Remote copy from a tmux session over ssh to local clipboard
+cat | nc -q1 localhost 2224

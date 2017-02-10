@@ -1,0 +1,183 @@
+#!/bin/bash
+
+BASE_DIR=$HOME/.dotfiles
+
+# global flags
+OS="unknown"
+PROCEED=0
+TMUX_VERSION=2.3
+PYTHON_VERSION=2.3
+
+VIM_PLUGINS=(
+    https://github.com/scrooloose/syntastic.git
+    https://github.com/motus/pig.vim.git
+    https://github.com/solarnz/thrift.vim.git
+    https://github.com/rhysd/vim-clang-format.git
+    https://github.com/fatih/vim-go.git
+    https://github.com/plasticboy/vim-markdown.git
+    https://github.com/derekwyatt/vim-scala.git
+)
+
+setup_brew () {
+    if [ $OS == "mac" ]; then
+        prompt_yn 'Setting up homebrew [mac os x package manager]'
+        if [ $PROCEED == 1 ]; then
+            # install
+            if ! loc="$(type -p brew)" && [ -z "$loc" ]; then
+                ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+            fi
+        fi
+    fi
+}
+
+setup_zsh () {
+    prompt_yn 'Setting up zsh [command line shell]'
+    if [ $PROCEED == 1 ]; then
+        # install
+        if [ $OS == "mac" ]; then
+            if ! loc="$(type -p zsh)" && [ -z "$loc" ]; then
+                brew install zsh
+            fi
+        elif [ $OS == "linux" ]; then
+            sudo apt-get install zsh
+        fi
+
+        # install oh-my-zsh
+        if [ ! -d $HOME/.oh-my-zsh ]; then
+            sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+        fi
+
+        symlink 'zshrc'
+
+        # set zsh as default shell
+        if ! grep -q $(which zsh) /etc/shells; then
+            echo $(which zsh) | sudo tee -a /etc/shells
+        fi
+        chsh -s $(which zsh)
+    fi
+}
+
+setup_vim () {
+    prompt_yn 'Setting up vim [text editor]'
+    if [ $PROCEED == 1 ]; then
+        if [ $OS == "mac" ]; then
+            # replace system distribution with latest brew distribution
+            if which vim | grep -q '^/usr/bin/vim$'; then
+                sudo rm $(which vim)
+            fi
+            brew install vim
+        elif [ $OS == "linux" ]; then
+            sudo apt-get install vim
+        fi
+
+        # point `vi` to new distribution
+        sudo rm $(which vi)
+        sudo ln -s $(which vim) /usr/bin/vi
+
+        # install pathogen package manager
+        if [ ! -f $BASE_DIR/vim/autoload/pathogen.vim ]; then
+            mkdir -p $BASE_DIR/vim/autoload $BASE_DIR/vim/bundle && \
+            curl -LSso $BASE_DIR/vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
+        fi
+
+        # install plugins via pathogen
+        (
+            cd $BASE_DIR/vim/bundle
+            for url in ${VIM_PLUGINS[@]}; do
+                git clone ${url}
+            done
+        )
+
+        symlink 'vim'
+        symlink 'vimrc'
+    fi
+}
+
+setup_tmux () {
+    prompt_yn 'Setting up tmux [command line multiplexer]'
+    if [ $PROCEED == 1 ]; then
+        # install
+        wget https://github.com/tmux/tmux/releases/download/$TMUX_VERSION/tmux-$TMUX_VERSION.tar.gz
+        tar xvf tmux-$TMUX_VERSION.tar.gz
+        (
+            cd tmux-$TMUX_VERSION
+            ./configure && make
+            sudo make install
+        )
+        rm -rf tmux-$TMUX_VERSION*
+
+        symlink 'tmux.conf'
+    fi
+}
+
+setup_slate () {
+    if [ $OS == "mac" ]; then
+        prompt_yn 'Setting up slate [window manager]'
+        if [ $PROCEED == 1 ]; then
+            # install
+            cd /Applications && curl http://www.ninjamonkeysoftware.com/slate/versions/slate-latest.tar.gz | tar -xz
+
+            symlink 'slate'
+        fi
+    fi
+}
+
+setup_python () {
+    prompt_yn 'Setting up python3'
+    if [ $PROCEED == 1 ]; then
+        if [ $OS == "mac" ]; then
+            brew install python3
+        elif [ $OS == "linux" ]; then
+            wget https://www.python.org/ftp/python/$PYTHON_VERSION/Python-$PYTHON_VERSION.tar.xz
+            tar xvf Python-$PYTHON_VERSION.tar.xz
+            (
+                cd Python-$PYTHON_VERSION
+                ./configure
+                make
+                make test
+                sudo make install
+            )
+            rm -rf Python-$PYTHON_VERSION*
+        fi
+    fi
+}
+
+prompt_yn () {
+    echo $1
+    read -p "Do you wish to proceed? [y/n] " yn
+    while true; do
+        case $yn in
+            [Yy]* ) PROCEED=1; break;;
+            [Nn]* ) PROCEED=0; break;;
+            * ) echo "Please answer yes or no.";;
+        esac
+    done
+}
+
+symlink () {
+    rm -rf $HOME/.$1
+    ln -s $BASE_DIR/$1 $HOME/.$1
+}
+
+check_os () {
+    if [ "$(uname)" == "Darwin" ]; then
+        OS="mac"
+    elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
+        OS="linux"
+    else
+        exit
+    fi
+}
+
+####################
+# START main routine
+####################
+
+check_os
+
+setup_brew
+setup_zsh
+setup_vim
+setup_tmux
+setup_slate
+setup_python
