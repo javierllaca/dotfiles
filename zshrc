@@ -28,6 +28,9 @@ bindkey -v
 
 export PATH=/usr/bin:/bin:/usr/sbin:/sbin   # default configuration
 export PATH=/usr/local/bin:$PATH            # higher precedence for brew-installed binaries
+export PATH=$PATH:/usr/local/sbin
+export PATH=$PATH:$HOME/opt
+export PATH=$PATH:$HOME/opt/arcanist/bin
 
 # java
 export JAVA_HOME=$(/usr/libexec/java_home -v 1.8)
@@ -71,3 +74,13 @@ alias tag='ctags -R .'
 alias c++='g++ -std=c++11 -stdlib=libc++'
 alias valg='valgrind --leak-check=yes'
 alias time='/usr/bin/time'
+
+# magnus/devserver aliases
+alias mb='go install -v pinterest.com/...'
+alias mbs='go install -v pinterest.com/ads/services/...'
+alias mt='go test pinterest.com/...'
+alias mts='go test pinterest.com/ads/services/...'
+alias tunnel='ssh -L 53901:localhost:53901 -L 53903:localhost:53903 '`
+    `'-L 53905:localhost:53905 -L 53907:localhost:53907 '`
+    `'-L 53963:localhost:53963 -L 53909:localhost:53909 '`
+    `'-L 53911:localhost:53911 dev-ads-061.ec2.pin220.com'
