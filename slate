@@ -1,0 +1,76 @@
+config defaultToCurrentScreen true
+
+########################################
+# Position aliases
+# alias <title> move <x>;<y> <w>;<h>
+########################################
+
+alias full move screenOriginX;screenOriginY screenSizeX;screenSizeY
+
+alias l_half move screenOriginX;screenOriginY screenSizeX/2;screenSizeY
+alias r_half move screenOriginX+screenSizeX/2;screenOriginY screenSizeX/2;screenSizeY
+
+alias t_half move screenOriginX;screenOriginY screenSizeX;screenSizeY/2
+alias b_half move screenOriginX;screenOriginY+screenSizeY/2 screenSizeX;screenSizeY/2
+
+alias t_left corner top-left resize:screenSizeX/2;screenSizeY/2
+alias t_right corner top-right resize:screenSizeX/2;screenSizeY/2
+alias b_left corner bottom-left resize:screenSizeX/2;screenSizeY/2
+alias b_right corner bottom-right resize:screenSizeX/2;screenSizeY/2
+
+alias center move screenOriginX+screenSizeX/6;screenOriginY+screenSizeY/6 2*screenSizeX/3;2*screenSizeY/3
+alias Center move screenOriginX+screenSizeX/12;screenOriginY+screenSizeY/12 10*screenSizeX/12;10*screenSizeY/12
+
+alias l_third move screenOriginX;screenOriginY screenSizeX/3;screenSizeY
+alias m_third move screenSizeX/3;screenOriginY screenSizeX/3;screenSizeY
+alias r_third move 2*screenSizeX/3;screenOriginY screenSizeX/3;screenSizeY
+
+alias lm_third move screenOriginX;screenOriginY 2*screenSizeX/3;screenSizeY
+alias mr_third move screenSizeX/3;screenOriginY 2*screenSizeX/3;screenSizeY
+
+########################################
+# Key aliases
+########################################
+
+alias triple ctrl;alt;cmd
+alias triple2 alt;ctrl;shift
+
+########################################
+# Application bindings
+########################################
+
+bind c:cmd;alt focus 'Google Chrome'
+bind t:cmd;alt focus 'Terminal'
+
+########################################
+# Location bindings
+########################################
+
+bind m:${triple} ${full}
+
+bind left:${triple} ${l_half}
+bind right:${triple} ${r_half}
+
+bind up:${triple} ${t_half}
+bind down:${triple} ${b_half}
+
+bind c:${triple} ${center}
+bind v:${triple} ${Center}
+
+bind left:${triple2} ${t_left}
+bind up:${triple2} ${t_right}
+bind down:${triple2} ${b_left}
+bind right:${triple2} ${b_right}
+
+bind ,:${triple} ${l_third}
+bind .:${triple} ${m_third}
+bind /:${triple} ${r_third}
+bind l:${triple} ${lm_third}
+bind ;:${triple} ${mr_third}
+
+########################################
+# Monitor switching bindings
+########################################
+
+bind right:alt,ctrl throw 1 resize
+bind left:alt,ctrl throw 0 resize
