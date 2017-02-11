@@ -6,7 +6,7 @@ BASE_DIR=$HOME/.dotfiles
 OS="unknown"
 PROCEED=0
 TMUX_VERSION=2.3
-PYTHON_VERSION=2.3
+PYTHON_VERSION=3.6.0
 
 VIM_PLUGINS=(
     https://github.com/scrooloose/syntastic.git
