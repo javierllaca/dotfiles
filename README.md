@@ -10,7 +10,7 @@ Clone repository into your home directory:
 
 Run the configure script:
 
-    cd ~/.dotfiles && ./configure
+    cd ~/.dotfiles && scripts/configure
 
 ## Scripts
 

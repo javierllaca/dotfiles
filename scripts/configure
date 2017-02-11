@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 BASE_DIR=$HOME/.dotfiles
 
@@ -39,7 +39,7 @@ setup_zsh () {
                 brew install zsh
             fi
         elif [ $OS == "linux" ]; then
-            sudo apt install zsh
+            sudo apt-get install zsh
         fi
 
         # install oh-my-zsh
@@ -67,7 +67,7 @@ setup_vim () {
             fi
             brew install vim
         elif [ $OS == "linux" ]; then
-            sudo apt install vim
+            sudo apt-get install vim
         fi
 
         # point `vi` to new distribution
@@ -101,10 +101,10 @@ setup_tmux () {
         tar xvf tmux-$TMUX_VERSION.tar.gz
         (
             cd tmux-$TMUX_VERSION
-            ./configure & make
+            ./configure && make
             sudo make install
         )
-        rm -rf tmux-$TMUX_VERSION
+        rm -rf tmux-$TMUX_VERSION*
 
         symlink 'tmux.conf'
     fi
@@ -137,7 +137,7 @@ setup_python () {
                 make test
                 sudo make install
             )
-            rm -rf tmux-$TMUX_VERSION
+            rm -rf Python-$PYTHON_VERSION*
         fi
     fi
 }
