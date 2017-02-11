@@ -26,6 +26,8 @@ export EDITOR=vi
 # vim key bindings
 bindkey -v
 
+export HOME=$(readlink -f ~)
+
 export PATH=/usr/bin:/bin:/usr/sbin:/sbin   # default configuration
 export PATH=/usr/local/bin:$PATH            # higher precedence for brew-installed binaries
 export PATH=$PATH:/usr/local/sbin
@@ -33,7 +35,6 @@ export PATH=$PATH:$HOME/opt
 export PATH=$PATH:$HOME/opt/arcanist/bin
 
 # java
-export JAVA_HOME=$(/usr/libexec/java_home -v 1.8)
 export PATH=$PATH:/usr/lib/jvm/java-8-oracle/bin
 export PATH=$PATH:/usr/lib/jvm/java-8-oracle/db/bin
 export PATH=$PATH:/usr/lib/jvm/java-8-oracle/jre/bin
@@ -42,7 +43,8 @@ export PATH=$PATH:/usr/lib/jvm/java-8-oracle/jre/bin
 export PYTHONPATH=$HOME/code/pinboard
 
 # golang
-export GOROOT=/usr/local/go
+#export GOROOT=/usr/local/go
+export GOROOT=$HOME/code/magnus/go/go1.8/
 export MAGNUS=$HOME/code/magnus
 export GOPATH=$MAGNUS
 export PATH=$GOROOT/bin:$PATH
@@ -80,4 +82,8 @@ alias mb='go install -v pinterest.com/...'
 alias mbs='go install -v pinterest.com/ads/services/...'
 alias mt='go test pinterest.com/...'
 alias mts='go test pinterest.com/ads/services/...'
-alias tunnel='ssh -L 53901:localhost:53901 -L 53903:localhost:53903 -L 53905:localhost:53905 -L 53907:localhost:53907 -L 53963:localhost:53963 -L 53909:localhost:53909 -L 53911:localhost:53911 dev-ads-061.ec2.pin220.com'
+alias hg='cat $(which hologram) | sed s/\ ==\ /\ =\ /g | source /dev/stdin use engineer'
+
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/code/magnus/manaslib/libcgo
+
+hg
