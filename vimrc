@@ -94,7 +94,7 @@ execute pathogen#infect()
 
 " add full (%F) or relative (%f) file path to your existing statusline
 set laststatus=2
-set statusline+=%f
+set statusline+=%c\ %f
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " hit ctrl-l to get rid of search highlight
@@ -209,3 +209,12 @@ au BufNewFile,BufRead *.ql set filetype=hive expandtab
 
 " Convenient way to visualize JSON objects
 com! FormatJSON %!python -m json.tool
+
+" SQLFmt
+map <Leader>sf :SQLFmt <Return>
+
+if &diff
+    colorscheme evening
+endif
+
+let g:autotagTagsFile="tags"

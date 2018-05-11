@@ -28,6 +28,8 @@ bindkey -v
 
 export PATH=/usr/bin:/bin:/usr/sbin:/sbin   # default configuration
 export PATH=/usr/local/bin:$PATH            # higher precedence for brew-installed binaries
+export PATH=$PATH:$HOME/bin
+export PATH=$PATH:$HOME/code/arcanist/bin
 
 # java
 export JAVA_HOME=$(/usr/libexec/java_home -v 1.8)
@@ -44,7 +46,8 @@ export MAGNUS=$HOME/code/magnus
 export GOPATH=$MAGNUS
 export PATH=$GOROOT/bin:$PATH
 export PATH=$MAGNUS/bin:$PATH
-export PATH=$MAGNUS/scripts/bin:$PATH
+
+export S3_TEST="s3://pinterest-test/test/jojinaga"
 
 # base aliases
 alias l='ls -l'
@@ -67,7 +70,22 @@ alias mvenv='python3 -m venv ./.venv'
 alias avenv='source ./.venv/bin/activate'
 
 # other handy aliases
-alias tag='ctags -R .'
+alias ctag='ctags .'
 alias c++='g++ -std=c++11 -stdlib=libc++'
 alias valg='valgrind --leak-check=yes'
 alias time='/usr/bin/time'
+
+alias devads-tunnel='ssh -L 53901:localhost:53901 -L 53903:localhost:53903 -L 53909:localhost:53909 -L 53911:localhost:53911 devads'
+
+alias hg='hologram use engineer'
+
+alias optimus_commons='mvn install -pl commons -am -DskipTests'
+alias optimus_checkstyle='mvn checkstyle:checkstyle -pl'
+
+alias gironde-login='gironde login jojinaga'
+alias gironde-eng='gironde sign -ca engineering --user jojinaga'
+alias gironde-m10n='gironde sign -ca m10n --user jojinaga'
+alias gironde-all='gironde-login && gironde-eng && gironde-m10n'
+
+# s3
+export AAEF='s3://pinterest-berlin/m10n_data/ad_all_event_flat/'

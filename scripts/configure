@@ -16,6 +16,7 @@ VIM_PLUGINS=(
     https://github.com/fatih/vim-go.git
     https://github.com/plasticboy/vim-markdown.git
     https://github.com/derekwyatt/vim-scala.git
+    https://github.com/craigemery/vim-autotag.git
 )
 
 setup_brew () {
@@ -80,17 +81,20 @@ setup_vim () {
             curl -LSso $BASE_DIR/vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
         fi
 
-        # install plugins via pathogen
-        (
-            cd $BASE_DIR/vim/bundle
-            for url in ${VIM_PLUGINS[@]}; do
-                git clone ${url}
-            done
-        )
+        install_vim_pathogen_plugins
 
         symlink 'vim'
         symlink 'vimrc'
     fi
+}
+
+install_vim_pathogen_plugins () {
+    (
+        cd $BASE_DIR/vim/bundle
+        for url in ${VIM_PLUGINS[@]}; do
+            git clone ${url}
+        done
+    )
 }
 
 setup_tmux () {
@@ -142,6 +146,19 @@ setup_python () {
     fi
 }
 
+setup_ctags () {
+    if [ $OS == "mac" ]; then
+        prompt_yn 'Setting up ctags'
+        if [ $PROCEED == 1 ]; then
+            # install
+            brew install ctags
+
+            symlink 'ctags'
+        fi
+    fi
+}
+
+
 prompt_yn () {
     echo $1
     read -p "Do you wish to proceed? [y/n] " yn
@@ -181,3 +198,6 @@ setup_vim
 setup_tmux
 setup_slate
 setup_python
+setup_ctags
+
+install_vim_pathogen_plugins
